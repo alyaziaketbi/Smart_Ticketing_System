@@ -1,0 +1,68 @@
+﻿@page
+@model IndexModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+@{
+    ViewData["Title"] = "Home";
+}
+
+@{
+    var id = Accessor.HttpContext?.Session.GetInt32("u:id");
+    var name = Accessor.HttpContext?.Session.GetString("u:name");
+    var role = Accessor.HttpContext?.Session.GetString("u:role");
+}
+
+<div class="text-center">
+    <h1>Welcome to Smart Ticketing Management</h1>
+</div>
+
+@if (id == null)
+{
+    <p>You are not logged in.</p>
+    <a href="/Login">Go to Login Page</a>
+}
+else
+{
+    <p>Welcome, @name (@role)</p>
+    <form method="post" asp-page="/Login" asp-page-handler="Logout">
+        <button type="submit">Logout</button>
+    </form>
+}
+
+@* <h2>DB Connectivity Test</h2>
+
+@if (Model.CanConnect)
+{
+    <p style="color:green;">✅ Connected successfully to the database!</p>
+
+    @if (Model.Tickets?.Count == 0)
+    {
+        <p>No records found.</p>
+    }
+    else
+    {
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+            </tr>
+            @foreach (var t in Model.Tickets)
+            {
+                <tr>
+                    <td>@t.ticket_id</td>
+                    <td>@t.subject</td>
+                    <td>@t.body</td>
+                </tr>
+            }
+        </table>
+    }
+
+} else
+{
+    <p style="color:red;">❌ Failed to connect to the database.</p>
+    @if (Model.ErrorMessage != null)
+    {
+        <p><b>Error:</b> @Model.ErrorMessage</p>
+    }
+} *@

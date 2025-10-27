@@ -1,0 +1,38 @@
+﻿@page
+@model SmartTicketingManagementApp.Pages.LoginModel
+@{
+	ViewData["Title"] = "Login";
+}
+
+<h2 class="text-center mb-4">Login by Email</h2>
+
+<div class="d-flex justify-content-center">
+    <form method="post" class="border p-4 rounded shadow-sm" style="max-width: 400px; width: 100%;">
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input asp-for="Email"
+                   class="form-control"
+                   list="emailList"
+                   placeholder="Type or pick an email..." />
+            <datalist id="emailList">
+                @foreach (var u in Model.Options)
+                {
+                    <option value="@u.Email">@u.Name (@u.Email)</option>
+                }
+            </datalist>
+            @if (!string.IsNullOrEmpty(Model.Error))
+            {
+                <div class="text-danger mt-2">@Model.Error</div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>
+
+
+
+@* @if (!string.IsNullOrEmpty(Model.Error))
+{
+  <p style="color:red">@Model.Error</p>
+} *@
