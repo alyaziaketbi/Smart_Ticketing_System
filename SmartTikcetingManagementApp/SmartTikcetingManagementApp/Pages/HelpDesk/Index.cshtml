@@ -1,7 +1,651 @@
 ﻿@page
 @model SmartTicketingManagementApp.Pages.HelpDesk.IndexModel
 @{
+    string active(string tab) => string.Equals(Model.Status ?? "All", tab, StringComparison.OrdinalIgnoreCase) ? "active" : "";
 }
 
 <h2>Help Desk Dashboard</h2>
-<p>Welcome Help Desk agent! You can assign tickets to support teams.</p>
+<p>Welcome @Model.UserName! You can assign tickets to support teams.</p>
+
+<div class="row g-3 mb-4">
+    <div class="col">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="stat-title">Total Tickets</h6>
+                <h3 class="stat-value">@ViewData["TotalTickets"]</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="stat-title">Unassigned</h6>
+                <h3 class="stat-value">@ViewData["UnassignedTickets"]</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="stat-title">In Progress</h6>
+                <h3 class="stat-value">@ViewData["InProgressTickets"]</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="stat-title">Resolved</h6>
+                <h3 class="stat-value">@ViewData["ResolvedTickets"]</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="stat-title">Canceled</h6>
+                <h3 class="stat-value">@ViewData["CanceledTickets"]</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h5 class="mt-4 mb-1 fw-semibold">Support Teams</h5>
+<p class="text-muted mb-3">Overview of all support teams and their workload</p>
+
+<div class="position-relative">
+    <!-- Left arrow -->
+    <button id="scrollLeft" class="carousel-btn left-btn">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <!-- Carousel container -->
+    <div id="teamCarousel" class="d-flex overflow-auto flex-nowrap gap-3 pb-2 px-1 scroll-smooth">
+        @foreach (var team in Model.TeamStats)
+        {
+            <div class="card team-card shadow-sm flex-shrink-0" style="width: 300px;">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-1">@team.TeamName</h6>
+                    <p class="text-muted small mb-3">@team.TeamDescription</p>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-light text-dark border">@team.TotalTickets total</span>
+                        <span class="badge bg-purple">@team.ActiveTickets active</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Right arrow -->
+    <button id="scrollRight" class="carousel-btn right-btn">
+        <i class="bi bi-chevron-right"></i>
+    </button>
+</div>
+
+
+<div class="ticket-card p-3 mb-4">
+<h3 class="mb-3">All Tickets</h3>
+
+ <form method="get" class="mb-3">
+    <div class="btn-group" role="group" aria-label="Status Filter">
+        <input type="hidden" name="page" value="1" /> <!-- reset pagination -->
+
+        <button type="submit" name="status" value=""
+                    class="btn @(string.IsNullOrEmpty(Model.Status) ? "btn-dark active" : "")">
+            All
+        </button>
+
+        <button type="submit" name="status" value="Open"
+                    class="btn @(Model.Status == "Open" ? "btn-dark active" : "")">
+            Open
+        </button>
+
+        <button type="submit" name="status" value="Assigned"
+                    class="btn @(Model.Status == "Assigned" ? "btn-dark active" : "")">
+            Assigned
+        </button>
+
+        <button type="submit" name="status" value="Resolved"
+                    class="btn @(Model.Status == "Resolved" ? "btn-dark active" : "")">
+            Resolved
+        </button>
+
+        <button type="submit" name="status" value="Canceled"
+                    class="btn @(Model.Status == "Canceled" ? "btn-dark active" : "")">
+            Cancelled
+        </button>
+    </div>
+</form>
+<p class="text-muted">Showing @Model.Tickets.Count of @Model.TotalCount result(s).</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Assigned To</th>
+            <th>Created</th>
+            <th>View</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Tickets == null || !Model.Tickets.Any())
+        {
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+                    No tickets found
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var t in Model.Tickets)
+            {
+                <tr>
+                    <td class="text-muted">@t.ticket_id</td>
+                    <td>@t.title</td>
+                    <td>@t.user</td>
+                    <td>
+                        <span class="badge status-badge @(t.status?.ToLower().Replace(" ", "-"))">
+                            @t.status
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge priority-badge @(t.priority?.ToLower())">
+                            @t.priority
+                        </span>
+                    </td>
+                    <td>@(string.IsNullOrWhiteSpace(t.assigned_to) ? "Not Assigned" : t.assigned_to)</td>
+                    <td>@(t.created_at?.ToString("g") ?? "—")</td>
+                    <td>
+                            <a asp-page="./Index" asp-route-viewId="@t.ticket_id" class="view-link">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+</div>
+
+@if (Model.SelectedTicket != null)
+{
+    var t = Model.SelectedTicket;
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>@t.title</h5>
+                    <a asp-page="./Index" class="btn-close"></a>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge status-badge @(t.status?.ToLower().Replace(" ", "-")) me-2">@t.status</span>
+                        <span class="badge priority-badge @(t.priority?.ToLower())">@t.priority</span>
+                    </div>
+
+                    <!-- Info box -->
+                    <div class="info-box p-3 mb-3">
+                        <div class="row">
+                            <div class="col-6 d-flex align-items-center">
+                                <i class="bi bi-person me-2 text-secondary"></i>
+                                <div>
+                                    <small class="text-muted d-block">Submitted by</small>
+                                    <strong>@t.user</strong>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <i class="bi bi-clock me-2 text-secondary"></i>
+                                <div>
+                                    <small class="text-muted d-block">Created</small>
+                                    <strong>@(t.created_at?.ToString("dd/MM/yyyy h:mm tt"))</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-semibold">Description</h6>
+                    <p class="text-muted">@t.description</p>
+
+                    @if (t.status?.ToLower() == "resolved")
+                    {
+                        <div class="p-3 rounded-3 mt-2"
+                             style="background-color:#eaf7ea; border-left:4px solid #28a745; padding-top:0.5rem !important;">
+                            <h6 class="fw-semibold text-success mb-1 mt-1">
+                                <i class="bi bi-check-circle"></i> Resolved
+                            </h6>
+                            <p class="mb-1 text-muted">Resolved by @t.assigned_to</p>
+                            <p class="mb-0"><strong>Resolution comments:</strong> @t.answer</p>
+                        </div>
+                    }
+
+                    @if (t.status?.ToLower() == "canceled")
+                    {
+                        <div id="resolutionBox" class="p-3 rounded-3 mt-2"
+                             style="background-color:#fdeaea; border-left:4px solid #dc3545; padding-top:0.5rem !important;">
+                            <h6 class="fw-semibold text-danger mb-1 mt-1">
+                                <i class="bi bi-x-circle"></i> Status
+                            </h6>
+                            <p class="mb-1 text-danger">This ticket has been cancelled by @t.assigned_to.</p>
+                            <p class="mb-0"><strong>Cancellation reason:</strong> @t.answer</p>
+                        </div>
+                    }
+
+                    <hr />
+                    @if (t.status?.ToLower() == "open")
+                    {
+                        <form method="post" class="assign-section">
+                            <input type="hidden" name="ticketId" value="@t.ticket_id" />
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-semibold mb-0">Assign to Support Team</label>
+
+                                <!-- Suggest button -->
+                                <button type="submit"
+                                        formaction="?handler=Suggest&ticketId=@t.ticket_id"
+                                        class="btn btn-outline-secondary d-flex align-items-center">
+                                    <i class="bi bi-magic me-1"></i> Suggest Team
+                                </button>
+                            </div>
+
+                            <!-- Show suggestion box if available -->
+                            @if (!string.IsNullOrEmpty(Model.SuggestedTeam) && !string.IsNullOrEmpty(Model.SuggestionReason))
+                            {
+                                <div class="alert alert-primary d-flex justify-content-between align-items-center flex-wrap">
+                                    <div>
+                                        <strong>Suggested Team:</strong> @Model.SuggestedTeam <br />
+                                        <span>@Model.SuggestionReason</span>
+                                    </div>
+
+                                    <div class="mt-2 mt-md-0">
+                                        <button type="submit"
+                                                
+                                                name="teamName"
+                                                value="@Model.SuggestedTeam"
+                                                formaction="?handler=Accept&ticketId=@t.ticket_id"
+                                                class="btn btn-sm btn-primary me-1">
+                                            Accept Suggestion
+                                        </button>
+                                        <button type="submit"
+                                                formaction="?handler=Dismiss&ticketId=@t.ticket_id"
+                                                class="btn btn-sm btn-outline-secondary">
+                                            Dismiss
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="d-flex align-items-center gap-2">
+                                <select class="form-select flex-grow-1" name="teamName">
+                                    <option value="">Select a team</option>
+                                    @foreach (var team in Model.Teams)
+                                    {
+                                        <option value="@team.team_name" selected="@(team.team_name == Model.SelectedTeam)">
+                                            @team.team_name
+                                        </option>
+                                    }
+                                </select>
+
+                                <button type="submit"
+                                        formaction="?handler=Assign&ticketId=@t.ticket_id"
+                                        class="btn btn-dark px-4">
+                                    Assign
+                                </button>
+                            </div>
+                        </form>
+                    }
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop show"></div>
+}
+
+
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item @(Model.Page <= 1 ? "disabled" : "")">
+            <a class="page-link" href="?status=@Model.Status&page=@(Model.Page - 1)&pageSize=@Model.PageSize">Prev</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?status=@Model.Status&page=@(Model.Page + 1)&pageSize=@Model.PageSize">Next</a>
+        </li>
+    </ul>
+</nav>
+
+@if (TempData["ToastMessage"] != null)
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle me-2"></i>
+                    @TempData["ToastMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .stat-card {
+        border-radius: 12px;
+        background-color: #fff;
+        border: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card .card-body {
+            text-align: left; /* Left align content */
+        }
+
+    .stat-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 4px;
+    }
+
+    .stat-value {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #212529;
+        margin: 0;
+    }
+
+    .team-card {
+        border-radius: 12px;
+        background-color: #fff;
+        border: 1px solid #e4e6eb;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .team-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+    .badge {
+        font-size: 0.75rem;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: 5px 8px;
+    }
+
+    .bg-purple {
+        background-color: #b56eff;
+        color: #fff;
+    }
+
+    /* Carousel buttons */
+    .carousel-btn {
+        position: absolute;
+        top: 35%;
+        transform: translateY(-50%);
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 2;
+    }
+
+        .carousel-btn:hover {
+            background-color: #f1f1f1;
+        }
+
+    .left-btn {
+        left: -12px;
+    }
+
+    .right-btn {
+        right: -12px;
+    }
+
+    .scroll-smooth {
+        scroll-behavior: smooth;
+    }
+
+    #teamCarousel::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    .ticket-card {
+        background: #ffffff; /* solid white */
+        border-radius: 12px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+    }
+
+    /* Table appearance */
+    .table thead th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    /* Prevent Bootstrap’s striped rows from changing card color */
+    .ticket-card .table {
+        background-color: transparent;
+        margin-bottom: 0;
+    }
+
+    /* Table header styling */
+    .table thead th {
+        background-color: #f1f3f5;
+        color: #343a40;
+        font-weight: 600;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+
+    /* Spacing between support teams and tickets table */
+    .ticket-card {
+        margin-top: 2rem; /* adds clean spacing below Support Teams */
+    }
+
+    /* Modern rounded filter buttons */
+    .btn-group {
+        background-color: #f1f3f5;
+        border-radius: 50px;
+        padding: 4px;
+    }
+
+        .btn-group .btn {
+            border: none;
+            border-radius: 50px !important;
+            font-weight: 500;
+            color: #495057;
+            background-color: transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+            .btn-group .btn:hover {
+                background-color: #e9ecef;
+            }
+
+            .btn-group .btn.btn-dark,
+            .btn-group .btn.active {
+                background-color: #212529;
+                color: #fff;
+            }
+
+    /* Optional: reduce table header font a bit for a cleaner UI */
+    .table thead th {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    /* View link (simple black text, no blue button) */
+    .view-link {
+        color: #212529;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+        .view-link:hover {
+            text-decoration: underline;
+        }
+
+
+    /* Priority badges */
+    .priority-badge.high {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .priority-badge.medium {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .priority-badge.low {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    /* Status badges */
+    .status-badge.open {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    .status-badge.assigned {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .status-badge.inprogress {
+        background-color: #d63384;
+        color: white;
+    }
+
+    .status-badge.resolved {
+        background-color: #198754;
+        color: white;
+    }
+
+    .status-badge.canceled {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Light info box for user and time */
+    .info-box {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+    }
+
+        /* Icons look clean and modern */
+        .info-box i {
+            font-size: 1.2rem;
+        }
+
+    /* Headings */
+    .modal-body h6 {
+        margin-top: 1rem;
+        font-weight: 600;
+        color: #212529;
+    }
+
+
+    .assign-section {
+        margin-top: 1.2rem;
+    }
+
+        /* Align label and suggest button */
+        .assign-section .form-label {
+            font-weight: 600;
+            color: #212529;
+        }
+
+        /* Dropdown and Assign button row */
+        .assign-section .form-select {
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        /* Suggest Team button */
+        .assign-section .btn-outline-secondary {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 6px 12px;
+        }
+
+        /* Assign button */
+        .assign-section .btn-dark {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .assign-section .btn-outline-secondary {
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+    .toast-container {
+        z-index: 1055;
+    }
+
+    .toast {
+        opacity: 0.95;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+    }
+
+
+
+</style>
+
+
+<!-- your Support Teams section HTML -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const carousel = document.getElementById("teamCarousel");
+        const scrollLeftBtn = document.getElementById("scrollLeft");
+        const scrollRightBtn = document.getElementById("scrollRight");
+
+        scrollLeftBtn.addEventListener("click", function () {
+            carousel.scrollBy({ left: -300, behavior: "smooth" });
+        });
+
+        scrollRightBtn.addEventListener("click", function () {
+            carousel.scrollBy({ left: 300, behavior: "smooth" });
+        });
+    });
+</script>

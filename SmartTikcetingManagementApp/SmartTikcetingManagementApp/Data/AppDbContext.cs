@@ -17,6 +17,7 @@ namespace SmartTicketingManagementApp.Data
         {
         }
 
+        public virtual DbSet<helpdesk_ticket> helpdesk_tickets { get; set; } = null!;
         public virtual DbSet<team> teams { get; set; } = null!;
         public virtual DbSet<team_member> team_members { get; set; } = null!;
         public virtual DbSet<ticket> tickets { get; set; } = null!;
@@ -26,6 +27,25 @@ namespace SmartTicketingManagementApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("vector");
+
+            modelBuilder.Entity<helpdesk_ticket>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("helpdesk_tickets");
+
+                entity.Property(e => e.assigned_to).HasColumnType("character varying");
+
+                entity.Property(e => e.created_at).HasColumnType("timestamp without time zone");
+
+                entity.Property(e => e.description).HasColumnType("character varying");
+
+                entity.Property(e => e.priority).HasColumnType("character varying");
+
+                entity.Property(e => e.title).HasColumnType("character varying");
+
+                entity.Property(e => e.user).HasColumnType("character varying");
+            });
 
             modelBuilder.Entity<team>(entity =>
             {
@@ -125,6 +145,8 @@ namespace SmartTicketingManagementApp.Data
                 entity.Property(e => e.email).HasColumnType("character varying");
 
                 entity.Property(e => e.name).HasColumnType("character varying");
+
+                entity.Property(e => e.user_role).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

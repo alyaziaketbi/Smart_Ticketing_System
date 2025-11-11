@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartTicketingManagementApp.Data;
+using SmartTicketingManagementApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("SmartTicketsDb")));
 
 builder.Services.AddHttpContextAccessor();
+
+// Register ApiClient
+builder.Services.AddHttpClient<ApiClient>(client =>
+{
+    client.BaseAddress = new Uri("https://project-smarttickets.onrender.com/docs"); // replace with your API base URL
+});
 
 // Session (no cookies/auth frameworks)
 builder.Services.AddSession(options =>

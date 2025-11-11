@@ -5,6 +5,8 @@ using SmartTicketingManagementApp.Data;
 using SmartTicketingManagementApp.Data.Entities;
 using SmartTicketingManagementApp.Models;
 using System.Linq;
+using SmartTicketingManagementApp.Pages;
+
 
 namespace SmartTicketingManagementApp.Pages.Requester
 {
@@ -20,14 +22,26 @@ namespace SmartTicketingManagementApp.Pages.Requester
             string Status,
             string? Priority,
             DateTime? CreatedAt,
-            string Body
+            string Body,
+            string? AssignedTeamId,
+            string AssignedTeamName,
+            string Answer
         );
+
+        public string? UserName { get; set; }
+        public string? UserRole { get; set; }
+
+        public string? assigned_team_id { get; set; }
+        public string? answer { get; set; }
+        public team? assigned_team { get; set; }  // Navigation property
+
 
         public List<TicketRow> Items { get; private set; } = new();
 
         [BindProperty] public string Title { get; set; } = string.Empty;
         [BindProperty] public string? Description { get; set; }
         [BindProperty] public string Priority { get; set; } = "Medium";
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -43,11 +57,16 @@ namespace SmartTicketingManagementApp.Pages.Requester
             if (uid is null)
                 return RedirectToPage("/Login");
 
+            // Get logged-in user info from session
+            var current = LoginModel.GetCurrent(HttpContext);
+            UserName = current?.Name ?? "User";
+            UserRole = current?.Role ?? "Requester";
+
             // Get the Requester tickets
             Items = await _db.tickets
                 .AsNoTracking()
                 .Where(t => t.requester_id == uid.Value &&
-                            (t.status == "OPEN" || t.status == "IN_PROGRESS"))
+                            (t.status == "OPEN" || t.status == "INPROGRESS" || t.status == "ASSIGNED" || t.status == "RESOLVED" || t.status == "CANCELED"))
                 .OrderByDescending(t => t.created_at)
                 .Select(t => new TicketRow(
                     t.ticket_id,
@@ -56,10 +75,39 @@ namespace SmartTicketingManagementApp.Pages.Requester
                     // If you have no 'priority' column, replace with: null
                     EF.Property<string?>(t, "priority"),
                     t.created_at,              // DateTime? from DB
-                    t.body ?? string.Empty     // coalesce to avoid null warnings
+                    t.body ?? string.Empty,    // coalesce to avoid null warnings
+                    t.assigned_team_id,
+                    t.assigned_team != null ? t.assigned_team.team_name : "Unassigned",
+                    t.answer ?? string.Empty
                 ))
                 .Take(50)
                 .ToListAsync();
+
+            // Ticket stats for the current requester
+            var totalTickets = await _db.tickets
+                .CountAsync(t => t.requester_id == uid.Value);
+
+            var openTickets = await _db.tickets
+                .CountAsync(t => t.requester_id == uid.Value && t.status == "OPEN");
+
+            var inProgressTickets = await _db.tickets
+                .CountAsync(t => t.requester_id == uid.Value && t.status == "INPROGRESS");
+
+            var resolvedTickets = await _db.tickets
+                .CountAsync(t => t.requester_id == uid.Value && t.status == "RESOLVED");
+
+            var CanceledTickets = await _db.tickets
+                .CountAsync(t => t.requester_id == uid.Value && t.status == "CANCELED");
+            var AssignedTickets = await _db.tickets
+                .CountAsync(t => t.requester_id == uid.Value && t.status == "ASSIGNED");
+
+            // Store them for the Razor page
+            ViewData["TotalTickets"] = totalTickets;
+            ViewData["OpenTickets"] = openTickets;
+            ViewData["InProgressTickets"] = inProgressTickets;
+            ViewData["ResolvedTickets"] = resolvedTickets;
+            ViewData["CanceledTickets"] = CanceledTickets;
+            ViewData["AssignedTickets"] = AssignedTickets;
 
             return Page();
         }
@@ -109,6 +157,8 @@ namespace SmartTicketingManagementApp.Pages.Requester
 
             _db.tickets.Add(entity);
             await _db.SaveChangesAsync();
+
+            TempData["ToastMessage"] = "Ticket created successfully";
 
             // Refresh list
             return RedirectToPage();
