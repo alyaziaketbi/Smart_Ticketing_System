@@ -71,8 +71,14 @@ namespace SmartTicketingManagementApp.Pages
             HttpContext.Session.SetString(SessionKeys.UserEmail, u.email ?? "");
             HttpContext.Session.SetString(SessionKeys.UserRole, role);
 
-			// 4) go anywhere you like after login (e.g., Index)
-			return role switch
+            //  Store logged-in user info
+            HttpContext.Session.SetInt32("UserId", u.user_id);
+            HttpContext.Session.SetString("UserName", u.name ?? "");
+            HttpContext.Session.SetString("UserEmail", u.email ?? "");
+            HttpContext.Session.SetString("UserRole", role);
+
+            // 4) go anywhere you like after login (e.g., Index)
+            return role switch
 			{
 				"HelpDesk" => RedirectToPage("/HelpDesk/Index"),
 				"Support" => RedirectToPage("/Support/Index"),
