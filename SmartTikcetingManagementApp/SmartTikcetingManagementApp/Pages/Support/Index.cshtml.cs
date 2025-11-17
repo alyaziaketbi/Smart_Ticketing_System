@@ -260,7 +260,7 @@ namespace SmartTicketingManagementApp.Pages.Support
                 title = r.Title,
                 answer = r.Answer,
                 assigned_team_name = r.Assigned_Team_Name,
-               // description = r.Description // shamma will add this later
+                body = r.Body ?? string.Empty
             });
 
             return new JsonResult(new { success = true, results = topResults });

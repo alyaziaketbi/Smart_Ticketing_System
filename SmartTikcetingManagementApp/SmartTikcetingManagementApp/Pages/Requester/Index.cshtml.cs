@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using SmartTicketingManagementApp.Data;
 using SmartTicketingManagementApp.Data.Entities;
 using SmartTicketingManagementApp.Models;
-using System.Linq;
 using SmartTicketingManagementApp.Pages;
+using SmartTicketingManagementApp.Services;
+using System.Linq;
 
 
 namespace SmartTicketingManagementApp.Pages.Requester
@@ -14,7 +15,12 @@ namespace SmartTicketingManagementApp.Pages.Requester
     {
 
         private readonly AppDbContext _db;
-        public IndexModel(AppDbContext db) => _db = db;
+        private readonly ApiClient _apiClient;
+        public IndexModel(AppDbContext db, ApiClient apiClient)
+        {
+            _db = db;
+            _apiClient = apiClient;
+        }
 
         public record TicketRow(
             int Id,
@@ -144,21 +150,19 @@ namespace SmartTicketingManagementApp.Pages.Requester
             {
                 subject = Title.Trim(),
                 body = string.IsNullOrWhiteSpace(Description) ? null : Description.Trim(),
+                type = "request",  // optional if your API supports it
+                priority = Priority,
                 status = "OPEN",
                 requester_id = uid.Value,
                 created_at = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified)
             };
 
-            try
-            {
-                _db.Entry(entity).Property("priority").CurrentValue = Priority;
-            }
-            catch { /* ignore if column doesn't exist */ }
+            var success = await _apiClient.CreateTicketAsync(entity);
 
-            _db.tickets.Add(entity);
-            await _db.SaveChangesAsync();
-
-            TempData["ToastMessage"] = "Ticket created successfully";
+            if (success)
+                TempData["ToastMessage"] = "Ticket created successfully via API!";
+            else
+                TempData["ToastMessage"] = "Failed to create ticket. Please try again.";
 
             // Refresh list
             return RedirectToPage();

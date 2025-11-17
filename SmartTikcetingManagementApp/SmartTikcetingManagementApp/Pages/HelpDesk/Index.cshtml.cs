@@ -30,7 +30,7 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
         public int PageSize { get; set; } = 10; // default “top 10 latest” per your page
         public IReadOnlyList<helpdesk_ticket> Tickets { get; private set; } = Array.Empty<helpdesk_ticket>();
 
-        private static readonly HashSet<string> AllowedStatuses = new(StringComparer.OrdinalIgnoreCase) { "Open", "Assigned", "Resolved", "Canceled" };
+        private static readonly HashSet<string> AllowedStatuses = new(StringComparer.OrdinalIgnoreCase) { "OPEN", "ASSIGNED", "RESOLVED", "CANCELED" };
         public int TotalCount { get; private set; }
 
         public List<team> Teams { get; private set; } = new();
@@ -55,11 +55,11 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
         public async Task<IActionResult> OnGetAsync(int? viewId)
         {
             // must be Help Desk user
-			var role = HttpContext.Session.GetString("u:role");
-			if (role != "HelpDesk")
-			{
-				Response.Redirect("/Login");
-			}
+            var role = HttpContext.Session.GetString("u:role");
+            if (role != "HelpDesk")
+            {
+                Response.Redirect("/Login");
+            }
 
             if (Page < 1) Page = 1;
             if (PageSize < 1 || PageSize > 100) PageSize = 10;
@@ -91,7 +91,7 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
             Tickets = await q.Skip((Page - 1) * PageSize)
                              .Take(PageSize)
                              .ToListAsync();
-            
+
             // Load teams for dropdown
             Teams = await _db.teams.AsNoTracking().ToListAsync();
 
@@ -103,24 +103,36 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
             }
 
             // ?? Dashboard Stats (Requester style)
-            var totalTickets = await _db.tickets.CountAsync();
+            //var totalTickets = await _db.tickets.CountAsync();
 
-            var unassignedTickets = await _db.tickets
-                .CountAsync(t => t.assigned_team_id == null);
+            //var unassignedTickets = await _db.tickets.CountAsync(t => t.assigned_team_id == null);
 
-            var inProgressTickets = await _db.tickets
-                .CountAsync(t => t.status == "INPROGRESS" || t.status == "ASSIGNED");
+            //var inProgressTickets = await _db.tickets
+                //.CountAsync(t => t.status == "INPROGRESS" || t.status == "ASSIGNED");
 
-            var resolvedTickets = await _db.tickets
-                .CountAsync(t => t.status == "RESOLVED");
-            var CanceledTickets = await _db.tickets
-                .CountAsync(t => t.status == "CANCELED");
+            //var resolvedTickets = await _db.tickets
+                //.CountAsync(t => t.status == "RESOLVED");
+            //var CanceledTickets = await _db.tickets
+                //.CountAsync(t => t.status == "CANCELED");
 
-            ViewData["TotalTickets"] = totalTickets;
-            ViewData["UnassignedTickets"] = unassignedTickets;
-            ViewData["InProgressTickets"] = inProgressTickets;
-            ViewData["ResolvedTickets"] = resolvedTickets;
-            ViewData["CanceledTickets"] = CanceledTickets;
+            var counts = await _db.tickets
+                        .AsNoTracking()
+                        .GroupBy(_ => 1)
+                        .Select(g => new
+                        {
+                        total = g.Count(),
+                        unassigned = g.Count(x => x.assigned_team_id == null),
+                        inProgress = g.Count(x => x.status == "ASSIGNED" || x.status == "INPROGRESS"),
+                        RESOLVED = g.Count(x => x.status == "RESOLVED"),
+                        CANCELED = g.Count(x => x.status == "CANCELED"),
+                        })
+                        .SingleAsync();
+
+            ViewData["TotalTickets"] = counts.total;
+            ViewData["UnassignedTickets"] = counts.unassigned;
+            ViewData["InProgressTickets"] = counts.inProgress;
+            ViewData["ResolvedTickets"] = counts.RESOLVED;
+            ViewData["CanceledTickets"] = counts.CANCELED;
 
             TeamStats = await _db.teams
     .Select(team => new TeamSummary(
@@ -148,11 +160,27 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
             }
 
             await LoadPageDataAsync(ticketId); // ? keep table visible
-            //SelectedTicket = await _db.helpdesk_tickets
-              //  .FirstOrDefaultAsync(t => t.ticket_id == ticketId);
+                                               //SelectedTicket = await _db.helpdesk_tickets
+                                               //  .FirstOrDefaultAsync(t => t.ticket_id == ticketId);
 
 
             return Page();
+        }
+
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnPostSuggestJsonAsync(int ticketId)
+        {
+            var response = await _apiClient.AssignTicketAsync(ticketId);
+
+            if (response is null)
+                return new JsonResult(new { ok = false });
+
+            return new JsonResult(new
+            {
+                ok = true,
+                team = response.assigned_team_name,
+                reason = response.reasoning
+            });
         }
 
         public async Task<IActionResult> OnPostAssignAsync(int ticketId, string teamName)
@@ -180,7 +208,7 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
             SelectedTicket = await _db.helpdesk_tickets
         .FirstOrDefaultAsync(t => t.ticket_id == ticketId);
 
-            TempData["Message"] = $"Ticket assigned to {team.team_name}.";
+            TempData["Message"] = $"Ticket ASSIGNED to {team.team_name}.";
 
             return RedirectToPage();
         }
@@ -198,8 +226,8 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
             }
 
             await LoadPageDataAsync(ticketId); // ? keep table visible
-          //  SelectedTicket = await _db.helpdesk_tickets
-        //.FirstOrDefaultAsync(t => t.ticket_id == ticketId);
+                                               //  SelectedTicket = await _db.helpdesk_tickets
+                                               //.FirstOrDefaultAsync(t => t.ticket_id == ticketId);
 
 
             // Just reload the page (the modal will remain visible with the dropdown updated)
@@ -244,7 +272,7 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
 
             ViewData["SupportTeams"] = teamWorkload;
 
-            // ? If a specific ticket is open in the modal, reload it too
+            // ? If a specific ticket is OPEN in the modal, reload it too
             if (ticketId.HasValue)
             {
                 SelectedTicket = await _db.helpdesk_tickets

@@ -819,11 +819,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj",
+      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj",
       "projectName": "SmartTicketingManagementApp",
-      "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj",
+      "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\obj\\",
+      "outputPath": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

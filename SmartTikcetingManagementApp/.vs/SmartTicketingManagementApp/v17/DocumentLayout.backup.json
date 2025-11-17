@@ -1,18 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\",
+  "WorkspaceRootPath": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\requester\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\pages\\requester\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp1\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\requester\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\pages\\requester\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\support\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp1\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\support\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\pages\\support\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\requester\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\pages\\requester\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp1\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\support\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\pages\\support\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp1\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\services\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\services\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|c:\\users\\user\\onedrive\\desktop\\smarttikcetingmanagementapp1\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\smarttikcetingmanagementapp\\pages\\requester\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6FC2F81D-7FF5-49EA-AEC1-254D0D7F14D5}|SmartTikcetingManagementApp\\SmartTicketingManagementApp.csproj|solutionrelative:smarttikcetingmanagementapp\\pages\\requester\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,13 +34,37 @@
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Services\\ApiClient.cs",
+              "RelativeDocumentMoniker": "SmartTikcetingManagementApp\\Services\\ApiClient.cs",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Services\\ApiClient.cs",
+              "RelativeToolTip": "SmartTikcetingManagementApp\\Services\\ApiClient.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAAwGAAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-12T16:00:37.076Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml.cs",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml.cs",
+              "RelativeToolTip": "SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml.cs",
+              "ViewState": "AgIAAPAAAAAAAAAAAAA5wP4AAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-06T17:09:46.543Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml.cs",
               "RelativeDocumentMoniker": "SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml.cs",
-              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml.cs",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml.cs",
               "RelativeToolTip": "SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAswF0AAABPAAAAAAAAAA==",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAAAJsAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-05T17:17:01.629Z",
               "EditorCaption": ""
@@ -41,27 +73,25 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml",
               "RelativeDocumentMoniker": "SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml",
-              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml",
               "RelativeToolTip": "SmartTikcetingManagementApp\\Pages\\Support\\Index.cshtml",
-              "ViewState": "AgIAALsCAAAAAAAAAAAAAMACAABKAAAAAAAAAA==",
+              "ViewState": "AgIAAM8CAAAAAAAAAAAmwNoCAABoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-05T16:04:54.083Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-05T16:04:54.083Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml",
               "RelativeDocumentMoniker": "SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml",
-              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\SmartTikcetingManagementApp1\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml",
               "RelativeToolTip": "SmartTikcetingManagementApp\\Pages\\Requester\\Index.cshtml",
-              "ViewState": "AgIAALgBAAAAAAAAAAAAANgBAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAJQBAAAAAAAAAAAAANgBAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-05T17:16:42.245Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-05T17:16:42.245Z"
             }
           ]
         }
