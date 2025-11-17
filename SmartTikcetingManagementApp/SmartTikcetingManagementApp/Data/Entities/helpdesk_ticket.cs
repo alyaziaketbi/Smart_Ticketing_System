@@ -13,7 +13,6 @@ namespace SmartTicketingManagementApp.Data.Entities
         public string? assigned_to { get; set; }
         public DateTime? created_at { get; set; }
         public string? description { get; set; }
-
         public string? answer { get; set; }
     }
 }

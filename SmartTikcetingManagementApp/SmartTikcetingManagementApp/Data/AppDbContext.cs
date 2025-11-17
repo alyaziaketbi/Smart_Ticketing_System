@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartTicketingManagementApp.Data.Entities;
 
 namespace SmartTicketingManagementApp.Data
@@ -34,6 +35,8 @@ namespace SmartTicketingManagementApp.Data
 
                 entity.ToView("helpdesk_tickets");
 
+                entity.Property(e => e.answer).HasColumnType("character varying");
+
                 entity.Property(e => e.assigned_to).HasColumnType("character varying");
 
                 entity.Property(e => e.created_at).HasColumnType("timestamp without time zone");
@@ -53,6 +56,10 @@ namespace SmartTicketingManagementApp.Data
                     .HasName("teams_pkey");
 
                 entity.Property(e => e.team_id).HasColumnType("character varying");
+
+                entity.Property(e => e.team_description).HasColumnType("character varying");
+
+                entity.Property(e => e.team_email_address).HasMaxLength(255);
 
                 entity.Property(e => e.team_name).HasColumnType("character varying");
             });
@@ -79,6 +86,29 @@ namespace SmartTicketingManagementApp.Data
             {
                 entity.HasKey(e => e.ticket_id)
                     .HasName("tickets_pkey");
+
+                entity.HasIndex(e => new { e.assigned_team_id, e.status }, "idx_tickets_assigned_team_status");
+
+                entity.HasIndex(e => e.created_at, "idx_tickets_created_at_desc")
+                    .HasSortOrder(new[] { SortOrder.Descending });
+
+                entity.HasIndex(e => new { e.requester_id, e.status }, "idx_tickets_requester_status");
+
+                entity.HasIndex(e => e.status, "idx_tickets_status");
+
+                entity.HasIndex(e => new { e.status, e.created_at }, "idx_tickets_status_created_at")
+                    .HasSortOrder(new[] { SortOrder.Ascending, SortOrder.Descending });
+
+                entity.HasIndex(e => new { e.assigned_team_id, e.status }, "ix_tickets_assigned_status");
+
+                entity.HasIndex(e => e.assigned_team_id, "ix_tickets_assigned_team_id");
+
+                entity.HasIndex(e => new { e.assigned_team_id, e.status }, "ix_tickets_assigned_team_status");
+
+                entity.HasIndex(e => e.created_at, "ix_tickets_created_at")
+                    .HasSortOrder(new[] { SortOrder.Descending });
+
+                entity.HasIndex(e => e.status, "ix_tickets_status");
 
                 entity.Property(e => e.answer).HasColumnType("character varying");
 
