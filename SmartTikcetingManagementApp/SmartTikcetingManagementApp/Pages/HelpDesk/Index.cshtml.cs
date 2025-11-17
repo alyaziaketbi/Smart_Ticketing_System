@@ -203,7 +203,15 @@ namespace SmartTicketingManagementApp.Pages.HelpDesk
                 ticket.assigned_team_id = team.team_id;
                 ticket.status = "ASSIGNED";
                 await _db.SaveChangesAsync();
+
+                // send email notification
+                await _apiClient.NotifyTicketAssignedTeamAsync(
+                    ticketId: ticketId,
+                    email: team.team_email_address,
+                    userName: team.team_name);
+
             }
+
             await LoadPageDataAsync(ticketId); // ? keep table visible
             SelectedTicket = await _db.helpdesk_tickets
         .FirstOrDefaultAsync(t => t.ticket_id == ticketId);

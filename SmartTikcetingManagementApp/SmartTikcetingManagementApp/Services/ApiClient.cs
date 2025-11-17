@@ -97,7 +97,62 @@ namespace SmartTicketingManagementApp.Services
             public string? Body { get; set; }
         }
 
+        public class NotificationRequest
+        {
+            public int ticket_id { get; set; }
+            public string recipient { get; set; } = string.Empty;
+            public string user_name { get; set; } = string.Empty;
+        }
 
+        // 4 notification types
+        public enum NotificationType
+        {
+            TicketAssignedUser,
+            TicketAssignedTeam,
+            TicketResolved,
+            TicketCanceled
+        }
+
+        public async Task<bool> SendNotificationAsync(NotificationType type, NotificationRequest request)
+        {
+            var endpoint = type switch
+            {
+                NotificationType.TicketAssignedUser => "/notify/ticket-assigned/user",
+                NotificationType.TicketAssignedTeam => "/notify/ticket-assigned/team",
+                NotificationType.TicketResolved => "/notify/ticket-resolved",
+                NotificationType.TicketCanceled => "/notify/ticket-canceled",
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+
+            var response = await _httpClient.PostAsJsonAsync(endpoint, request);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            var body = await response.Content.ReadAsStringAsync();
+            _logger.LogWarning(
+                "Failed to send notification {Type} for ticket {TicketId}. " +
+                "StatusCode={StatusCode}, Body={Body}",
+                type, request.ticket_id, response.StatusCode, body);
+
+            return false;
+        }
+
+        public Task<bool> NotifyTicketAssignedUserAsync(int ticketId, string email, string userName) =>
+            SendNotificationAsync(NotificationType.TicketAssignedUser,
+                new NotificationRequest { ticket_id = ticketId, recipient = email, user_name = userName });
+
+        public Task<bool> NotifyTicketAssignedTeamAsync(int ticketId, string email, string userName) =>
+            SendNotificationAsync(NotificationType.TicketAssignedTeam,
+                new NotificationRequest { ticket_id = ticketId, recipient = email, user_name = userName });
+
+        public Task<bool> NotifyTicketResolvedAsync(int ticketId, string email, string userName) =>
+            SendNotificationAsync(NotificationType.TicketResolved,
+                new NotificationRequest { ticket_id = ticketId, recipient = email, user_name = userName });
+
+        public Task<bool> NotifyTicketCanceledAsync(int ticketId, string email, string userName) =>
+            SendNotificationAsync(NotificationType.TicketCanceled,
+                new NotificationRequest { ticket_id = ticketId, recipient = email, user_name = userName });
     }
 }
 

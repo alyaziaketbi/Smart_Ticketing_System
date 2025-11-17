@@ -69,7 +69,7 @@ namespace SmartTicketingManagementApp.Pages.Support
 				Response.Redirect("/Login");
 
             }
-// Logged-in user id
+                // Logged-in user id
                 var uid = HttpContext.Session.GetInt32(SessionKeys.UserId);
                 if (uid is null)
                     return RedirectToPage("/Login");
@@ -231,6 +231,22 @@ namespace SmartTicketingManagementApp.Pages.Support
                 ticket.answer = update.Answer;
 
             await _db.SaveChangesAsync();
+
+            var user = await _db.users.FindAsync(ticket.requester_id);
+
+            if (ticket.status == "CANCELED")
+                // send email notification
+                await _apiClient.NotifyTicketCanceledAsync(
+                    ticketId: ticket.ticket_id,
+                    email: "SmartTicketsMgmt@outlook.com",
+                    userName: user.name);
+
+            if (ticket.status == "RESOLVED")
+                // send email notification
+                await _apiClient.NotifyTicketResolvedAsync(
+                    ticketId: ticket.ticket_id,
+                    email: "SmartTicketsMgmt@outlook.com",
+                    userName: user.name);
 
             return new JsonResult(new { success = true, message = "Ticket updated successfully." });
         }
