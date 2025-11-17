@@ -1,7 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static SmartTicketingManagementApp.Pages.Support.IndexModel;
+using static System.Net.WebRequestMethods;
 
 namespace SmartTicketingManagementApp.Services
 {
@@ -14,6 +16,12 @@ namespace SmartTicketingManagementApp.Services
         {
             _httpClient = httpClient;
             _logger = logger;
+        }
+
+        public async Task<bool> CreateTicketAsync(object request)
+        {
+            var response = await _httpClient.PostAsJsonAsync("/tickets", request);
+            return response.IsSuccessStatusCode;
         }
 
         public class AssignResponse
@@ -86,6 +94,7 @@ namespace SmartTicketingManagementApp.Services
             public string? Title { get; set; }
             public string? Answer { get; set; }
             public string? Assigned_Team_Name { get; set; }
+            public string? Body { get; set; }
         }
 
 
