@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartTicketingManagementApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42abd1b2768cc15003a4035893a7f365626e2eb4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a836d5c7d97af25631be663793d8840aa570ff5")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartTicketingManagementApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartTicketingManagementApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

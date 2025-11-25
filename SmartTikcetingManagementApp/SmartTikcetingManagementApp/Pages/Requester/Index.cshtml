@@ -259,16 +259,43 @@ else
 
 @if (TempData["ToastMessage"] != null)
 {
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+    <style>
+        /* Light green success style (like Bootstrap alert-success) */
+        .toast-success-light {
+            background-color: #d1e7dd !important; /* Light success green */
+            color: #0f5132 !important; /* Dark green success text */
+            border-left: 5px solid #0f5132; /* Accent line */
+        }
+    </style>
+
+    <div class="toast-container position-fixed top-50 start-50 translate-middle p-3">
+        <div id="liveToast"
+             class="toast toast-success-light show"
+             role="alert" aria-live="assertive" aria-atomic="true"
+             data-bs-autohide="true"
+             data-bs-delay="3000">
+            <!-- Auto-hide after 3 seconds -->
+
             <div class="d-flex">
                 <div class="toast-body">
                     <i class="bi bi-check-circle me-2"></i> @TempData["ToastMessage"]
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button"
+                        class="btn-close me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"></button>
             </div>
         </div>
     </div>
+
+    <script>
+        // Bootstraps the toast on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastEl = document.getElementById('liveToast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        });
+    </script>
 }
 
 

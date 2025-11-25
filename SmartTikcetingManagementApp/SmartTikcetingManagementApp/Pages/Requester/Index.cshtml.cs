@@ -160,7 +160,7 @@ namespace SmartTicketingManagementApp.Pages.Requester
             var success = await _apiClient.CreateTicketAsync(entity);
 
             if (success)
-                TempData["ToastMessage"] = "Ticket created successfully via API!";
+                TempData["ToastMessage"] = "Ticket created successfully.";
             else
                 TempData["ToastMessage"] = "Failed to create ticket. Please try again.";
 
